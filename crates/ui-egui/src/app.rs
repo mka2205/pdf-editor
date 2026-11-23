@@ -42,9 +42,10 @@ impl PdfCraftApp {
         let front = self.pane_front(panes::Place::Main);
         let dirty = front.is_some_and(|i| self.has_unsaved_work(i));
         let mark = if dirty { " •" } else { "" };
+        let app_name = if self.offline_desktop { "PDF Editor Local" } else { "PdfCraft" };
         let titled = |name: Option<String>| {
             name.or_else(|| self.combine_showing().then(|| tl!("Combine files").to_owned()))
-                .map_or_else(|| "PdfCraft".to_owned(), |name| format!("{name}{mark} — PdfCraft"))
+                .map_or_else(|| app_name.to_owned(), |name| format!("{name}{mark} — {app_name}"))
         };
         let title = titled(front.and_then(|i| crate::canvas::tab_label(self, i)));
         // The web page's title is what an embedding host reads to tell which file opened, so it
@@ -154,6 +155,7 @@ impl PdfCraftApp {
             last_session: Default::default(),
             quit_session: None,
             reload_changed_files: true,
+            offline_desktop: false,
             update_check_at_start: true,
             show_secured_notice: true,
             text_links: true,

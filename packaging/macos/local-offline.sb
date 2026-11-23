@@ -1,0 +1,6 @@
+(version 1)
+; Keep native file dialogs and window services available. Block socket
+; networking in the editor and its children. The desktop source also
+; disables browser and printer handoff to other processes.
+(allow default)
+(deny network*)

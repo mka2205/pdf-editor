@@ -185,6 +185,7 @@ impl PdfCraftApp {
     pub fn open_print(&mut self) {
         let Some((i, _)) = self.active_ids() else { return };
         let (printers, printers_loading) = match self.printer_source.clone() {
+            _ if self.offline_desktop => (Vec::new(), false),
             // The list from the last time the dialog opened, until the fresh one arrives.
             #[cfg(not(target_arch = "wasm32"))]
             Some(source) => {
@@ -625,6 +626,10 @@ impl PdfCraftApp {
     /// a preset path returns `true` once the save picker is showing; the file is written on a
     /// later frame, when the user has chosen where.
     pub fn print_now(&mut self) -> bool {
+        if self.offline_desktop && self.print_draft.printer.is_some() {
+            self.notify_tr("PDF Editor Local supports printing to a PDF file only.");
+            return false;
+        }
         if still_looking(&self.print_draft) || self.print_draft.papers_loading() {
             return false;
         }

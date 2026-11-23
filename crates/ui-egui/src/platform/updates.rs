@@ -124,6 +124,10 @@ impl PdfCraftApp {
 
     /// Help ▸ Check for updates: ask for the latest release and show the outcome.
     pub fn check_for_updates(&mut self) {
+        if self.offline_desktop {
+            self.notify_tr("Update checks are disabled in PDF Editor Local.");
+            return;
+        }
         #[cfg(not(target_arch = "wasm32"))]
         {
             self.updates.open = true;
@@ -137,6 +141,9 @@ impl PdfCraftApp {
 
     /// Starts the checks and picks up their answers (each frame).
     pub(crate) fn poll_updates(&mut self) {
+        if self.offline_desktop {
+            return;
+        }
         #[cfg(not(target_arch = "wasm32"))]
         {
             let Some(ctx) = self.ctx.clone() else { return };

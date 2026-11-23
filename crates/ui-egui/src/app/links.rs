@@ -142,6 +142,10 @@ impl PdfCraftApp {
     /// PdfCraft's own links; an address that came from a document goes through
     /// [`Self::request_document_url`].
     pub fn open_url(&mut self, url: &str) {
+        if self.offline_desktop {
+            self.notify_tr("External links are disabled in PDF Editor Local.");
+            return;
+        }
         #[cfg(not(target_arch = "wasm32"))]
         {
             if let Some(ctx) = &self.ctx {

@@ -485,6 +485,8 @@ pub struct PdfCraftApp {
     quit_session: Option<last_session::LastSession>,
     /// Preferences: reload a document when its file changes on disk (#431).
     pub reload_changed_files: bool,
+    /// The personal desktop build disables online actions and printer handoff.
+    pub offline_desktop: bool,
     /// Preferences: ask for a newer release when the desktop app starts (#5737). Off, the app
     /// asks only from Help ▸ Check for updates.
     pub update_check_at_start: bool,
